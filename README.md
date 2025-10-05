@@ -1,6 +1,6 @@
 # 🎬 Netflix Movies and TV Shows Data Analysis using SQL
 
-![]
+![](https://github.com/bprasad03/netflix-data-analysis-sql/blob/main/logo.jpg)
 
 ## 📘 Overview
 
@@ -47,3 +47,46 @@ CREATE TABLE netflix
 	listed_in	  VARCHAR(250),
 	description   VARCHAR(550)
 );
+```
+
+## Business Problems and Solutions
+
+### 1. Count the Number of Movies vs TV Shows
+
+```sql
+SELECT 
+    type,
+    COUNT(*)
+FROM netflix
+GROUP BY 1;
+```
+
+### 2️⃣ Find the Most Common Rating for Movies and TV Shows
+```sql
+SELECT 
+    type,
+    rating,
+    COUNT(*) AS total
+FROM netflix
+GROUP BY type, rating
+HAVING COUNT(*) = (
+    SELECT MAX(counts) 
+    FROM (
+        SELECT COUNT(*) AS counts
+        FROM netflix n2
+        WHERE n2.type = netflix.type
+        GROUP BY rating
+    ) AS subquery
+);
+
+### 3️⃣ List All Movies Released in a Specific Year (e.g., 2020)
+
+```sql
+SELECT * 
+FROM netflix
+WHERE type = 'Movie' 
+  AND release_year = 2020;
+
+
+
+
